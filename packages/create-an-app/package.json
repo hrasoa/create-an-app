@@ -1,0 +1,22 @@
+{
+  "name": "create-an-app",
+  "version": "0.0.2-20.4",
+  "license": "MIT",
+  "bin": "./bin/index.js",
+  "repository": "hrasoa/create-an-app",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "commander": "^2.14.1",
+    "cross-spawn": "^6.0.4",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.1.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb": "^16.1.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  }
+}
