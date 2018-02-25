@@ -36,6 +36,7 @@ const resolveAppDir = relativePath => join(appDir, relativePath);
 
 (async () => {
   const hasYarn = await isYarnInstalled();
+  console.log();
   console.log(colors.bold(`${name} v${version}`));
   console.log();
 
