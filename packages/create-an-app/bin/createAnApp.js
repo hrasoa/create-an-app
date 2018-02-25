@@ -3,9 +3,9 @@ const fs = require('fs-extra');
 const { exec } = require('child_process');
 const { EOL } = require('os');
 const program = require('commander');
+const spawn = require('cross-spawn');
 const inquirer = require('inquirer');
 const colors = require('./utils/colors');
-const install = require('./utils/install');
 const { name, version } = require('../package.json');
 
 const cmdDir = fs.realpathSync(process.cwd());
@@ -216,6 +216,26 @@ function writeJson(path, content) {
     EOL,
   }).then(() => true)
     .catch(() => `${colors.error('error')} Could not write ${path}.`);
+}
+
+function install(args, options, useYarn) {
+  return new Promise((resolve, reject) => {
+    const manager = useYarn ? 'yarn' : 'npm';
+    const cmd = useYarn ? 'add' : 'install';
+    const child = spawn(manager, [
+      cmd,
+      ...args,
+    ], {
+      stdio: 'inherit',
+      ...options,
+    });
+    child.on('exit', (code) => {
+      if (code !== 0) reject(new Error(`child process exited with code ${code}`));
+      resolve(code);
+    });
+  })
+    .then(() => true)
+    .catch(() => false);
 }
 
 function isYarnInstalled() {
