@@ -46,7 +46,8 @@ inquirer.prompt([
     }
     fs.readdir(appDir, run);
   } catch (err) {
-    console.log(err);
+    console.log(`${colors.error('error')} ${err.message}`);
+    console.log();
   }
 });
 
@@ -70,7 +71,11 @@ async function run(err, appDirFiles) {
     license: 'MIT',
   };
 
-  await writeJson(pkgPath, pkg);
+  let writePkg = await writeJson(join('toto', pkgPath), pkg);
+  if (writePkg !== true) {
+    console.log(writePkg);
+    return;
+  }
 
   console.log();
   console.log(`📦  Installing ${colors.verbose(template)}`);
@@ -114,7 +119,12 @@ async function run(err, appDirFiles) {
   files.forEach((fileName) => {
     fs.copySync(resolveTemplateDir(fileName), resolveAppDir(fileName));
   });
-  await writeJson(pkgPath, pkg);
+  writePkg = await writeJson(pkgPath, pkg);
+  if (writePkg !== true) {
+    console.log(writePkg);
+    return;
+  }
+
   console.log(`${colors.info('sucess')} Files were created.`);
   console.log();
 
@@ -185,5 +195,6 @@ function writeJson(path, content) {
   return fs.writeJson(path, content, {
     spaces: '  ',
     EOL,
-  });
+  }).then(() => true)
+    .catch(() => `${colors.error('error')} Could not write ${path}.`);
 }
