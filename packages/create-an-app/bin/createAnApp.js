@@ -61,7 +61,7 @@ const resolveAppDir = relativePath => join(appDir, relativePath);
         run(err, appDirFiles, useYarn);
       });
     } catch (err) {
-      console.log(`${colors.error('error')} ${err.message}`);
+      logError(err.message);
       console.log();
     }
   });
@@ -73,7 +73,7 @@ async function run(err, appDirFiles, useYarn) {
   }
 
   if (appDirFiles && appDirFiles.length) {
-    console.log(`${colors.error('error')} ${colors.warn(appDir)} seems not empty.`);
+    logError(`${colors.warn(appDir)} seems not empty.`);
     console.log('Please remove it\'s content or use --force option.');
     return;
   }
@@ -121,7 +121,7 @@ async function run(err, appDirFiles, useYarn) {
 
   if (!(files && files.length)) {
     console.log('');
-    console.log(`${colors.error('error')} The "files" field seems not defined or empty in the "${template}" package.json`);
+    logError(`The "files" field seems not defined or empty in the "${template}" package.json`);
     console.log('We use it to create the application file structure.');
     console.log('Related documentation: https://docs.npmjs.com/files/package.json#files');
     console.log('');
@@ -132,9 +132,15 @@ async function run(err, appDirFiles, useYarn) {
   console.log('📦  Creating the files structure:');
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
-  files.forEach((fileName) => {
-    fs.copySync(resolveTemplateDir(fileName), resolveAppDir(fileName));
-  });
+  const dir = await Promise.all(files.map(async fileName =>
+    copy(resolveTemplateDir(fileName), resolveAppDir(fileName))));
+  const failed = dir.filter(file => file !== true);
+  if (failed.length) {
+    logError('Could not copy these files:');
+    console.log(`${colors.verbose(failed.map(({ source }) => source).join('\n'))}`);
+    return;
+  }
+
   writePkg = await writeJson(pkgPath, pkg);
   if (writePkg !== true) {
     console.log(writePkg);
@@ -205,9 +211,19 @@ function addDescriptionToScripts(scripts, useYarn) {
   });
 }
 
+function logError(message) {
+  console.log(`${colors.error('error')} ${message}`);
+}
+
 function versionedDependency(deps) {
   return Object.keys(deps)
     .map(module => `${module}@${deps[module]}`);
+}
+
+function copy(source, dest) {
+  return fs.copy(source, dest)
+    .then(() => true)
+    .catch(() => ({ source, dest }));
 }
 
 function writeJson(path, content) {
@@ -215,7 +231,7 @@ function writeJson(path, content) {
     spaces: '  ',
     EOL,
   }).then(() => true)
-    .catch(() => `${colors.error('error')} Could not write ${path}.`);
+    .catch(() => `Could not write ${path}.`);
 }
 
 function install(args, options, useYarn) {
