@@ -8,7 +8,7 @@ const [major] = currentNodeVersion.split('.');
 
 if (major < 8) {
   console.log(`node v${colors.error('error')} ${currentNodeVersion} is not compatible.`);
-  console.log(`Please ugrade to node ${engines.node}`);
+  console.log(`Please upgrade to node ${engines.node}`);
   process.exit(1);
 }
 
