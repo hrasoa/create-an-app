@@ -8,8 +8,7 @@ const [major] = currentNodeVersion.split('.');
 
 if (major < 8) {
   console.log(`${colors.error('error')} Your node v${currentNodeVersion} is not compatible.`);
-  console.log(`Please upgrade to node ${engines.node} (LTS version) for better performance.`);
-  console.log('Fore more informations please read http://bit.ly/2h4yccC');
+  console.log(`Please upgrade to node ${engines.node}.`);
   process.exit(1);
 }
 
