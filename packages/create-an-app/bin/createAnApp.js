@@ -1,10 +1,10 @@
 const { join } = require('path');
 const fs = require('fs-extra');
 const { EOL } = require('os');
-const spawn = require('cross-spawn');
 const program = require('commander');
 const inquirer = require('inquirer');
-const colors = require('./colors');
+const colors = require('./utils/colors');
+const install = require('./utils/install');
 const { name, version } = require('../package.json');
 
 const cmdDir = fs.realpathSync(process.cwd());
@@ -76,14 +76,13 @@ async function run(err, appDirFiles) {
   console.log(`📦  Installing ${colors.verbose(template)}`);
   console.log();
 
-  spawn.sync('yarn', [
-    'add',
+  const installTemplate = await install([
     '-D',
     template,
   ], {
-    stdio: 'inherit',
     cwd: appDir,
   });
+  if (installTemplate !== true) return;
 
   const templateDir = resolveAppDir(`node_modules/${template}`);
   const resolveTemplateDir = relativePath => join(templateDir, relativePath);
@@ -111,7 +110,7 @@ async function run(err, appDirFiles) {
   console.log();
   console.log('📦  Creating the files structure:');
   console.log(`${colors.verbose(files.join('\n'))}`);
-  console.log('package.json');
+  console.log(colors.verbose('package.json'));
   files.forEach((fileName) => {
     fs.copySync(resolveTemplateDir(fileName), resolveAppDir(fileName));
   });
@@ -124,31 +123,29 @@ async function run(err, appDirFiles) {
   console.log(`${colors.verbose(versionedDeps.join('\n'))}`);
   console.log();
 
-  spawn.sync('yarn', [
-    'add',
+  const installDeps = await install([
     ...versionedDeps,
   ], {
-    stdio: 'inherit',
     cwd: appDir,
   });
+  if (installDeps !== true) return;
 
   console.log();
   console.log('📦  Installing dev dependencies:');
   console.log(`${colors.verbose(versionedDevDeps.join('\n'))}`);
   console.log();
 
-  spawn.sync('yarn', [
-    'add',
+  const installDevDeps = await install([
     '-D',
     ...versionedDevDeps,
   ], {
-    stdio: 'inherit',
     cwd: appDir,
   });
+  if (installDevDeps !== true) return;
 
   console.log();
   console.log('✨  Installation complete.');
-  console.log('Do not forget to rename the "name" inside the package.json file.');
+  console.log(`Do not forget to rename the ${colors.warn('name')} inside the package.json file.`);
   console.log('You can now run these commands inside your application:');
   console.log();
   console.log(npmScripts.map(({ cmd, desc }) =>

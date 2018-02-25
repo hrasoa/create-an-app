@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const colors = require('./colors');
+const colors = require('./utils/colors');
 const { engines } = require('../package.json');
 
 const currentNodeVersion = process.versions.node;
