@@ -1,6 +1,6 @@
 {
   "name": "some-scripts",
-  "version": "0.0.2-20.8",
+  "version": "0.0.2-20.9",
   "license": "MIT",
   "files": [
     "bin",
