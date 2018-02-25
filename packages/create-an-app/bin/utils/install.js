@@ -1,20 +1,20 @@
 const spawn = require('cross-spawn');
 
-const command = (args, options) => new Promise((resolve, reject) => {
-  const cmd = spawn('yarn', [
-    'add',
+module.exports = (args, options, useYarn) => new Promise((resolve, reject) => {
+  const manager = useYarn ? 'yarn' : 'npm';
+  const cmd = useYarn ? 'add' : 'install';
+
+  const child = spawn(manager, [
+    cmd,
     ...args,
   ], {
     stdio: 'inherit',
     ...options,
   });
-  cmd.on('exit', (code) => {
+  child.on('exit', (code) => {
     if (code !== 0) reject(new Error(`child process exited with code ${code}`));
     resolve(code);
   });
-});
-
-module.exports = (args, options) =>
-  command(args, options)
-    .then(() => true)
-    .catch(() => false);
+})
+  .then(() => true)
+  .catch(() => false);

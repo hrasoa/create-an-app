@@ -5,8 +5,7 @@
   "files": [
     "public",
     "server",
-    "src",
-    ".gitignore"
+    "src"
   ],
   "repository": "hrasoa/create-an-app",
   "scripts": {

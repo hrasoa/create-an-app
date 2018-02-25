@@ -1,5 +1,6 @@
 const { join } = require('path');
 const fs = require('fs-extra');
+const { exec } = require('child_process');
 const { EOL } = require('os');
 const program = require('commander');
 const inquirer = require('inquirer');
@@ -31,27 +32,42 @@ const template = program.template || defaultTemplate;
 
 const resolveAppDir = relativePath => join(appDir, relativePath);
 
-inquirer.prompt([
-  {
-    name: 'ok',
-    message: `Create a new application in ${colors.warn(appDir)} with the template ${colors.warn(template)}`,
-    type: 'confirm',
-  },
-]).then(async (answers) => {
-  if (!answers.ok) return;
-  try {
-    await fs.ensureDir(appDir);
-    if (program.force === true) {
-      await fs.emptyDir(appDir);
-    }
-    fs.readdir(appDir, run);
-  } catch (err) {
-    console.log(`${colors.error('error')} ${err.message}`);
-    console.log();
-  }
-});
+(async () => {
+  const hasYarn = await isYarnInstalled();
+  const questions = [
+    {
+      name: 'ok',
+      message: `Create a new application in ${colors.warn(appDir)} with the template ${colors.warn(template)}`,
+      type: 'confirm',
+    },
+  ];
 
-async function run(err, appDirFiles) {
+  if (hasYarn) {
+    questions.push({
+      name: 'useYarn',
+      message: `Do you want to use ${colors.warn('yarn')} ?`,
+      type: 'confirm',
+    });
+  }
+
+  inquirer.prompt(questions).then(async ({ ok, useYarn }) => {
+    if (!ok) return;
+    try {
+      await fs.ensureDir(appDir);
+      if (program.force === true) {
+        await fs.emptyDir(appDir);
+      }
+      fs.readdir(appDir, (err, appDirFiles) => {
+        run(err, appDirFiles, useYarn);
+      });
+    } catch (err) {
+      console.log(`${colors.error('error')} ${err.message}`);
+      console.log();
+    }
+  });
+})();
+
+async function run(err, appDirFiles, useYarn) {
   if (err) {
     throw new Error(err);
   }
@@ -71,7 +87,7 @@ async function run(err, appDirFiles) {
     license: 'MIT',
   };
 
-  let writePkg = await writeJson(join('toto', pkgPath), pkg);
+  let writePkg = await writeJson(pkgPath, pkg);
   if (writePkg !== true) {
     console.log(writePkg);
     return;
@@ -86,7 +102,7 @@ async function run(err, appDirFiles) {
     template,
   ], {
     cwd: appDir,
-  });
+  }, useYarn);
   if (installTemplate !== true) return;
 
   const templateDir = resolveAppDir(`node_modules/${template}`);
@@ -99,7 +115,7 @@ async function run(err, appDirFiles) {
   } = require(resolveTemplateDir('package.json'));
   const versionedDeps = versionedDependency(dependencies);
   const versionedDevDeps = versionedDependency(devDependencies);
-  const npmScripts = addDescriptionToScripts(Object.keys(scripts));
+  const npmScripts = addDescriptionToScripts(Object.keys(scripts), useYarn);
 
   pkg.scripts = scripts || {};
 
@@ -137,7 +153,7 @@ async function run(err, appDirFiles) {
     ...versionedDeps,
   ], {
     cwd: appDir,
-  });
+  }, useYarn);
   if (installDeps !== true) return;
 
   console.log();
@@ -150,7 +166,7 @@ async function run(err, appDirFiles) {
     ...versionedDevDeps,
   ], {
     cwd: appDir,
-  });
+  }, useYarn);
   if (installDevDeps !== true) return;
 
   console.log();
@@ -163,18 +179,21 @@ async function run(err, appDirFiles) {
   console.log();
 }
 
-function addDescriptionToScripts(scripts) {
+function addDescriptionToScripts(scripts, useYarn) {
   return scripts.map((cmd) => {
     let desc = '';
+    let runCmd = useYarn ? 'yarn' : 'npm';
     switch (cmd) {
       case 'start':
         desc = 'Start the local server.';
         break;
       case 'start:prod':
         desc = 'Start the production server.';
+        runCmd = useYarn ? 'yarn' : 'npm run';
         break;
       case 'build':
         desc = 'Bundle the application for production.';
+        runCmd = useYarn ? 'yarn' : 'npm run';
         break;
       case 'test':
         desc = 'Run the tests.';
@@ -182,7 +201,7 @@ function addDescriptionToScripts(scripts) {
       default:
         break;
     }
-    return { cmd: `yarn ${cmd}`, desc };
+    return { cmd: `${runCmd} ${cmd}`, desc };
   });
 }
 
@@ -197,4 +216,15 @@ function writeJson(path, content) {
     EOL,
   }).then(() => true)
     .catch(() => `${colors.error('error')} Could not write ${path}.`);
+}
+
+function isYarnInstalled() {
+  return new Promise((resolve, reject) => {
+    exec('yarnpkg --version', (error) => {
+      if (error) reject(new Error('yarn is not installed'));
+      resolve(true);
+    });
+  })
+    .then(() => true)
+    .catch(() => false);
 }
