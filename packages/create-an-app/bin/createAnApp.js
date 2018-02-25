@@ -196,8 +196,6 @@ async function run(err, appDirFiles, useYarn) {
   console.log(npmScripts.map(({ cmd, desc }) =>
     `${colors.debug(cmd)}\n  ${desc}`).join('\n\n'));
   console.log();
-
-  return;
 }
 
 function addDescriptionToScripts(scripts, useYarn) {
