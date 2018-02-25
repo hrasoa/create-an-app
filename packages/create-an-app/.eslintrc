@@ -3,7 +3,7 @@
   "env": {
     "node": true
   },
-  "rules": {  
+  "rules": {
     "no-console": "off",
     "object-shorthand": "off",
     "func-names": "off",

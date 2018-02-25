@@ -4,6 +4,9 @@
   "license": "MIT",
   "bin": "./bin/index.js",
   "repository": "hrasoa/create-an-app",
+  "scripts": {
+    "lint": "eslint bin/**"
+  },
   "dependencies": {
     "colors": "^1.1.2",
     "commander": "^2.14.1",
