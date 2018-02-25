@@ -32,7 +32,13 @@ const appDir = program.args && program.args.length ? join(cmdDir, program.args[0
 const template = program.template || defaultTemplate;
 const { yes } = program;
 
-const resolveAppDir = relativePath => join(appDir, relativePath);
+const resolveAppDir = (relativePath) => {
+  try {
+    return join(appDir, relativePath);
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
 (async () => {
   const hasYarn = await isYarnInstalled();
