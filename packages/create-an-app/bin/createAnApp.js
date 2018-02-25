@@ -36,9 +36,10 @@ const resolveAppDir = relativePath => join(appDir, relativePath);
 
 (async () => {
   const hasYarn = await isYarnInstalled();
+  console.log(colors.bold(`${name} v${version}`));
+  console.log();
 
   if (yes) {
-    console.log();
     console.log(`Creating an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`);
     prepare({ ok: true, useYarn: hasYarn });
     return;
@@ -83,7 +84,6 @@ async function run(err, appDirFiles, useYarn) {
   if (err) {
     throw new Error(err);
   }
-  console.log(colors.bold(`${name} v${version}`));
 
   const pkg = {
     name: 'a-new-app',
