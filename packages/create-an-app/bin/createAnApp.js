@@ -145,9 +145,11 @@ async function run(err, appDirFiles, useYarn) {
   console.log('📦  Creating the files structure:');
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
+
   const dir = await Promise.all(files.map(async fileName =>
     copy(resolveTemplateDir(fileName), resolveAppDir(fileName))));
   const failed = dir.filter(file => file !== true);
+
   if (failed.length) {
     logError('Could not copy these files:');
     console.log(`${colors.verbose(failed.map(({ source }) => source).join('\n'))}`);
@@ -248,7 +250,7 @@ function writeJson(path, content) {
 }
 
 function install(args, options, useYarn) {
-  return new Promise((resolve, reject) => {
+  return promisify((resolve, reject) => {
     const bin = useYarn ? 'yarn' : 'npm';
     const cmd = useYarn ? 'add' : 'install';
     const child = spawn(bin, [
@@ -259,21 +261,23 @@ function install(args, options, useYarn) {
       ...options,
     });
     child.on('exit', (code) => {
-      if (code !== 0) reject(new Error(`child process exited with code ${code}`));
-      resolve(code);
+      if (code !== 0) reject(false);
+      resolve(true);
     });
-  })
-    .then(() => true)
-    .catch(() => false);
+  });
 }
 
 function isYarnInstalled() {
-  return new Promise((resolve, reject) => {
+  return promisify((resolve, reject) => {
     exec('yarnpkg --version', (error) => {
-      if (error) reject(new Error('yarn is not installed'));
+      if (error) reject(false);
       resolve(true);
     });
-  })
-    .then(() => true)
-    .catch(() => false);
+  });
+}
+
+function promisify(fn) {
+  return new Promise(fn)
+    .then(success => success)
+    .catch(err => err);
 }
