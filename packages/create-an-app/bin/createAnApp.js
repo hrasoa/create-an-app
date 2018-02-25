@@ -15,8 +15,9 @@ program
   .version(version, '-v, --version')
   .usage('[path] [options]')
   .description('Where [path] is the relative path to the target directory. default: current directory')
-  .option('-t, --template [string]', `Template module. default: ${defaultTemplate}`)
-  .option('-f, --force', 'Clear the target directory if not empty')
+  .option('-t, --template [string]', `Template module. default: ${defaultTemplate}.`)
+  .option('-f, --force', 'Clear the target directory if not empty.')
+  .option('-y, --yes', 'Skip all questions.')
   .on('--help', () => {
     console.log('');
     console.log('  Examples:');
@@ -29,11 +30,20 @@ program
 
 const appDir = program.args && program.args.length ? join(cmdDir, program.args[0]) : cmdDir;
 const template = program.template || defaultTemplate;
+const { yes } = program;
 
 const resolveAppDir = relativePath => join(appDir, relativePath);
 
 (async () => {
   const hasYarn = await isYarnInstalled();
+
+  if (yes) {
+    console.log();
+    console.log(`Creating an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`);
+    prepare({ ok: true, useYarn: hasYarn });
+    return;
+  }
+
   const questions = [
     {
       name: 'ok',
@@ -50,27 +60,36 @@ const resolveAppDir = relativePath => join(appDir, relativePath);
     });
   }
 
-  inquirer.prompt(questions).then(async ({ ok, useYarn }) => {
-    if (!ok) return;
-    try {
-      await fs.ensureDir(appDir);
-      if (program.force === true) {
-        await fs.emptyDir(appDir);
-      }
-      fs.readdir(appDir, (err, appDirFiles) => {
-        run(err, appDirFiles, useYarn);
-      });
-    } catch (err) {
-      logError(err.message);
-      console.log();
-    }
-  });
+  inquirer.prompt(questions).then(prepare);
 })();
+
+async function prepare({ ok, useYarn }) {
+  if (!ok) return;
+  try {
+    await fs.ensureDir(appDir);
+    if (program.force === true) {
+      await fs.emptyDir(appDir);
+    }
+    fs.readdir(appDir, (err, appDirFiles) => {
+      run(err, appDirFiles, useYarn);
+    });
+  } catch (err) {
+    logError(err.message);
+    console.log();
+  }
+}
 
 async function run(err, appDirFiles, useYarn) {
   if (err) {
     throw new Error(err);
   }
+  console.log(colors.bold(`${name} v${version}`));
+
+  const pkg = {
+    name: 'a-new-app',
+    version: '0.0.0',
+    license: 'MIT',
+  };
 
   if (appDirFiles && appDirFiles.length) {
     logError(`${colors.warn(appDir)} seems not empty.`);
@@ -78,14 +97,7 @@ async function run(err, appDirFiles, useYarn) {
     return;
   }
 
-  console.log(colors.bold(`${name} v${version}`));
-
   const pkgPath = resolveAppDir('package.json');
-  const pkg = {
-    name: 'a-new-app',
-    version: '0.0.0',
-    license: 'MIT',
-  };
 
   let writePkg = await writeJson(pkgPath, pkg);
   if (writePkg !== true) {
@@ -183,6 +195,8 @@ async function run(err, appDirFiles, useYarn) {
   console.log(npmScripts.map(({ cmd, desc }) =>
     `${colors.debug(cmd)}\n  ${desc}`).join('\n\n'));
   console.log();
+
+  return;
 }
 
 function addDescriptionToScripts(scripts, useYarn) {
