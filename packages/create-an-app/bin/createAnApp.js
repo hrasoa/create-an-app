@@ -92,6 +92,14 @@ async function run(err, appDirFiles, useYarn) {
     license: 'MIT',
   };
 
+  const gitignore = [
+    'node_modules',
+    'npm-debug.log*',
+    'yarn-debug.log*',
+    'yarn-error.log*',
+    'dist/',
+  ].join('\n');
+
   if (appDirFiles && appDirFiles.length) {
     logError(`${colors.warn(appDir)} seems not empty.`);
     console.log('Please remove it\'s content or use --force option.');
@@ -146,8 +154,11 @@ async function run(err, appDirFiles, useYarn) {
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
 
-  const dir = await Promise.all(files.map(async fileName =>
-    copy(resolveTemplateDir(fileName), resolveAppDir(fileName))));
+  const dir = await Promise.all([
+    ...files.map(async fileName =>
+      copy(resolveTemplateDir(fileName), resolveAppDir(fileName))),
+    writeFile(gitignore, resolveAppDir('.gitignore')),
+  ]);
   const failed = dir.filter(file => file !== true);
 
   if (failed.length) {
@@ -247,6 +258,12 @@ function writeJson(path, content) {
     EOL,
   }).then(() => true)
     .catch(() => `Could not write ${path}.`);
+}
+
+function writeFile(content, path) {
+  return fs.writeFile(path, content + EOL)
+    .then(() => true)
+    .catch(() => ({ source: path, path }));
 }
 
 function install(args, options, useYarn) {
