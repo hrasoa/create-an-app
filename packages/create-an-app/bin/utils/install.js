@@ -1,5 +1,4 @@
 const spawn = require('cross-spawn');
-const colors = require('./colors');
 
 const command = (args, options) => new Promise((resolve, reject) => {
   const cmd = spawn('yarn', [
@@ -18,8 +17,6 @@ const command = (args, options) => new Promise((resolve, reject) => {
 module.exports = async (args, options) => {
   const child = await command(args, options)
     .then(() => true)
-    .catch((error) => {
-      console.log(`${colors.debug('info')} ${error.message}`);
-    });
+    .catch(() => false);
   return child;
 };
