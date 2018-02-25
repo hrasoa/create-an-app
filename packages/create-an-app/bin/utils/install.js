@@ -14,9 +14,7 @@ const command = (args, options) => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = async (args, options) => {
-  const child = await command(args, options)
+module.exports = (args, options) =>
+  command(args, options)
     .then(() => true)
     .catch(() => false);
-  return child;
-};
