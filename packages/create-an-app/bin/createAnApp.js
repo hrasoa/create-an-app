@@ -37,7 +37,7 @@ const resolveAppDir = relativePath => join(appDir, relativePath);
   const questions = [
     {
       name: 'ok',
-      message: `Create a new application in ${colors.warn(appDir)} with the template ${colors.warn(template)}`,
+      message: `Create an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`,
       type: 'confirm',
     },
   ];
