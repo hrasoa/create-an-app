@@ -220,9 +220,9 @@ function writeJson(path, content) {
 
 function install(args, options, useYarn) {
   return new Promise((resolve, reject) => {
-    const manager = useYarn ? 'yarn' : 'npm';
+    const bin = useYarn ? 'yarn' : 'npm';
     const cmd = useYarn ? 'add' : 'install';
-    const child = spawn(manager, [
+    const child = spawn(bin, [
       cmd,
       ...args,
     ], {
