@@ -74,9 +74,10 @@ const resolveAppDir = (relativePath) => {
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
   try {
-    await fs.ensureDir(appDir);
+    await canThrow(fs.ensureDir(appDir));
+
     if (program.force === true) {
-      await fs.emptyDir(appDir);
+      await canThrow(fs.emptyDir(appDir));
     }
     fs.readdir(appDir, (err, appDirFiles) => {
       run(err, appDirFiles, useYarn);
@@ -297,6 +298,12 @@ function isYarnInstalled() {
       resolve(true);
     });
   });
+}
+
+function canThrow(promise) {
+  return promise
+    .then(success => success)
+    .catch((err) => { throw new Error(err); })
 }
 
 function promisify(fn) {
