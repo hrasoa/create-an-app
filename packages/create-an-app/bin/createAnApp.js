@@ -5,11 +5,13 @@ const { EOL } = require('os');
 const program = require('commander');
 const spawn = require('cross-spawn');
 const inquirer = require('inquirer');
+const emoji = require('node-emoji');
 const colors = require('./utils/colors');
 const { name, version } = require('../package.json');
 
 const cmdDir = fs.realpathSync(process.cwd());
 const defaultTemplate = 'a-react-template';
+const pkgEmoji = emoji.get('package');
 
 program
   .version(version, '-v, --version')
@@ -157,7 +159,7 @@ async function run(err, appDirFiles, useYarn) {
   }
 
   console.log();
-  console.log('📦  Creating the files structure:');
+  logPkg(`Creating the files structure`);
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
 
@@ -184,7 +186,7 @@ async function run(err, appDirFiles, useYarn) {
   console.log();
 
   console.log();
-  console.log('📦  Installing dependencies:');
+  logPkg('Installing dependencies:');
   console.log(`${colors.verbose(versionedDeps.join('\n'))}`);
   console.log();
 
@@ -196,7 +198,7 @@ async function run(err, appDirFiles, useYarn) {
   if (installDeps !== true) return;
 
   console.log();
-  console.log('📦  Installing dev dependencies:');
+  logPkg('Installing dev dependencies:');
   console.log(`${colors.verbose(versionedDevDeps.join('\n'))}`);
   console.log();
 
@@ -246,6 +248,10 @@ function addDescriptionToScripts(scripts, useYarn) {
 
 function logError(message) {
   console.log(`${colors.error('error')} ${message}`);
+}
+
+function logPkg(message) {
+  console.log(`${pkgEmoji}  ${message}`);
 }
 
 function versionedDependency(deps) {
