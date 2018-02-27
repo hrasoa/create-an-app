@@ -34,6 +34,11 @@ const appDir = program.args && program.args.length ? join(cmdDir, program.args[0
 const template = program.template || defaultTemplate;
 const { yes } = program;
 
+/**
+ *
+ * @param relativePath
+ * @returns {*}
+ */
 const resolveAppDir = (relativePath) => {
   try {
     return join(appDir, relativePath);
