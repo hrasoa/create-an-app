@@ -7,7 +7,7 @@ const babelConfing = require('../config/babel');
 module.exports = {
   name: 'client',
   target: 'web',
-  // mode: 'production',
+  mode: 'production',
   entry: {
     main: './src/index.js',
   },
@@ -39,17 +39,24 @@ module.exports = {
       },
     ],
   },
-  /* optimization: {
+  optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
+          chunks: 'all',
+          minChunks: 2,
+          name: 'commons',
+          maxInitialRequests: 5, // The default limit is too small to showcase the effect
+          minSize: 0, // This is example is too small to create commons chunks
+        },
+        vendors: {
           test: /node_modules/,
           name: 'vendors',
           chunks: 'all',
         },
       },
     },
-  }, */
+  },
   plugins: [
     new CopyWebpackPlugin([
       'public/manifest.json',

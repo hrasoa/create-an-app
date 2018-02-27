@@ -28,7 +28,11 @@ module.exports = class Template {
   setChunks(clientStats = {}, chunkNames = []) {
     const { scripts } = flushChunks(clientStats, {
       chunkNames,
-      before: ['vendors', 'main'],
+      before: [
+        'vendors',
+        'commons',
+        'main',
+      ],
       after: [],
     });
     const js = scripts.map(file => clientStats.publicPath + file);

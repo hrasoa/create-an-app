@@ -1,13 +1,12 @@
 const webpack = require('webpack');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const { appDistClient } = require('../config/paths');
-const { stylelintConfig, eslintConfig } = require('../config/webpack');
+const { eslintConfig } = require('../config/webpack');
 const babelConfing = require('../config/babel');
 
 module.exports = {
   name: 'client',
   target: 'web',
-  // mode: 'development',
+  mode: 'development',
   entry: [
     'webpack-hot-middleware/client',
     './src/index.js',
@@ -55,20 +54,27 @@ module.exports = {
     ],
   },
   devtool: 'source-map',
-  /* optimization: {
+  optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
+          chunks: 'all',
+          minChunks: 2,
+          name: 'commons',
+          maxInitialRequests: 5, // The default limit is too small to showcase the effect
+          minSize: 0, // This is example is too small to create commons chunks
+        },
+        vendors: {
           test: /node_modules/,
           name: 'vendors',
           chunks: 'all',
         },
       },
     },
-  }, */
+  },
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new StyleLintPlugin({ configFile: stylelintConfig }),
+    // new StyleLintPlugin({ configFile: stylelintConfig }),
   ],
 };

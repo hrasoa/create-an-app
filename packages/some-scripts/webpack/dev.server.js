@@ -5,7 +5,7 @@ const babelConfing = require('../config/babel');
 module.exports = {
   name: 'server',
   target: 'node',
-  // mode: 'development',
+  mode: 'development',
   entry: './server/render',
   output: {
     path: appDistServer,

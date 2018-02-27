@@ -4,7 +4,7 @@ const babelConfing = require('../config/babel');
 module.exports = {
   name: 'server',
   target: 'node',
-  // mode: 'production',
+  mode: 'production',
   entry: './server/render',
   stats: {
     modules: false,
