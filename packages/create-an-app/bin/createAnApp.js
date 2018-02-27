@@ -251,7 +251,11 @@ function logError(message) {
 }
 
 function logPkg(message) {
-  console.log(`${pkgEmoji}  ${message}`);
+  logWithEmoji('package', message);
+}
+
+function logWithEmoji(emojiName, message) {
+  console.log(`${emoji.has(emojiName) ? emoji.get(emojiName) : '+'}  ${message}`);
 }
 
 function versionedDependency(deps) {
