@@ -73,6 +73,11 @@ const resolveAppDir = (relativePath) => {
   inquirer.prompt(questions).then(prepare);
 })();
 
+/**
+ *
+ * @param ok
+ * @param useYarn
+ */
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
   try {
@@ -90,6 +95,12 @@ async function prepare({ ok, useYarn }) {
   }
 }
 
+/**
+ *
+ * @param err
+ * @param appDirFiles
+ * @param useYarn
+ */
 async function run(err, appDirFiles, useYarn) {
   if (err) {
     throw new Error(err);
@@ -220,6 +231,12 @@ async function run(err, appDirFiles, useYarn) {
   console.log();
 }
 
+/**
+ *
+ * @param scripts
+ * @param useYarn
+ * @returns {Array|*}
+ */
 function addDescriptionToScripts(scripts, useYarn) {
   return scripts.map((cmd) => {
     let desc = '';
@@ -246,29 +263,59 @@ function addDescriptionToScripts(scripts, useYarn) {
   });
 }
 
+/**
+ *
+ * @param message
+ */
 function logError(message) {
   console.log(`${colors.error('error')} ${message}`);
 }
 
+/**
+ *
+ * @param message
+ */
 function logPkg(message) {
   logWithEmoji('package', message);
 }
 
+/**
+ *
+ * @param emojiName
+ * @param message
+ */
 function logWithEmoji(emojiName, message) {
   console.log(`${emoji.hasEmoji(emojiName) ? emoji.get(emojiName) : '+'}  ${message}`);
 }
 
+/**
+ *
+ * @param deps
+ * @returns {Array}
+ */
 function versionedDependency(deps) {
   return Object.keys(deps)
     .map(module => `${module}@${deps[module]}`);
 }
 
+/**
+ *
+ * @param source
+ * @param dest
+ * @returns {Promise.<boolean>}
+ */
 function copy(source, dest) {
   return fs.copy(source, dest)
     .then(() => true)
     .catch(() => ({ source, dest }));
 }
 
+/**
+ *
+ * @param path
+ * @param content
+ * @returns {Promise.<boolean>}
+ */
 function writeJson(path, content) {
   return fs.writeJson(path, content, {
     spaces: '  ',
@@ -277,12 +324,25 @@ function writeJson(path, content) {
     .catch(() => `Could not write ${path}.`);
 }
 
+/**
+ *
+ * @param content
+ * @param path
+ * @returns {Promise.<boolean>}
+ */
 function writeFile(content, path) {
   return fs.writeFile(path, content + EOL)
     .then(() => true)
     .catch(() => ({ source: path, path }));
 }
 
+/**
+ *
+ * @param args
+ * @param options
+ * @param useYarn
+ * @returns {Promise.<TResult>}
+ */
 function install(args, options, useYarn) {
   return promisify((resolve, reject) => {
     const bin = useYarn ? 'yarn' : 'npm';
@@ -301,6 +361,10 @@ function install(args, options, useYarn) {
   });
 }
 
+/**
+ *
+ * @returns {Promise.<TResult>}
+ */
 function isYarnInstalled() {
   return promisify((resolve, reject) => {
     exec('yarnpkg --version', (error) => {
@@ -310,12 +374,22 @@ function isYarnInstalled() {
   });
 }
 
+/**
+ *
+ * @param promise
+ * @returns {Promise.<TResult>}
+ */
 function canThrow(promise) {
   return promise
     .then(success => success)
     .catch((err) => { throw new Error(err); })
 }
 
+/**
+ *
+ * @param fn
+ * @returns {Promise.<TResult>}
+ */
 function promisify(fn) {
   return new Promise(fn)
     .then(success => success)
