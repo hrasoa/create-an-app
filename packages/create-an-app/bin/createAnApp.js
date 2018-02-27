@@ -247,11 +247,11 @@ function addDescriptionToScripts(scripts, useYarn) {
         break;
       case 'start:prod':
         desc = 'Start the production server.';
-        runCmd = useYarn ? 'yarn' : 'npm run';
+        runCmd = useYarn ? runCmd : `${runCmd} run`;
         break;
       case 'build':
         desc = 'Bundle the application for production.';
-        runCmd = useYarn ? 'yarn' : 'npm run';
+        runCmd = useYarn ? runCmd : `${runCmd} run`;
         break;
       case 'test':
         desc = 'Run the tests.';
