@@ -11,7 +11,6 @@ const { name, version } = require('../package.json');
 
 const cmdDir = fs.realpathSync(process.cwd());
 const defaultTemplate = 'a-react-template';
-const pkgEmoji = emoji.get('package');
 
 program
   .version(version, '-v, --version')
