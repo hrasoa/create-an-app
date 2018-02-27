@@ -124,7 +124,7 @@ async function run(err, appDirFiles, useYarn) {
   }
 
   console.log();
-  console.log(`📦  Installing ${colors.verbose(template)}`);
+  logPkg(`Installing ${colors.verbose(template)}`);
   console.log();
 
   const installTemplate = await install([
