@@ -1,6 +1,7 @@
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { appDistClient } = require('../config/paths');
 const babelConfing = require('../config/babel');
 
@@ -46,8 +47,6 @@ module.exports = {
           chunks: 'all',
           minChunks: 2,
           name: 'commons',
-          maxInitialRequests: 5, // The default limit is too small to showcase the effect
-          minSize: 0, // This is example is too small to create commons chunks
         },
         vendors: {
           test: /node_modules/,
@@ -76,5 +75,6 @@ module.exports = {
         },
       ],
     }),
+    new BundleAnalyzerPlugin(),
   ],
 };

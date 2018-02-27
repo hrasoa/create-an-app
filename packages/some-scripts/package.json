@@ -54,6 +54,7 @@
     "through": "^2.3.8",
     "uglify-js": "^3.3.12",
     "webpack": "^4.0.1",
+    "webpack-bundle-analyzer": "^2.11.0",
     "webpack-dev-middleware": "^2.0.5",
     "webpack-flush-chunks": "^1.2.3",
     "webpack-hot-middleware": "^2.21.0",
