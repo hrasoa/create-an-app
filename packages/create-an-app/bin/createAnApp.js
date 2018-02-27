@@ -53,8 +53,7 @@ const resolveAppDir = (relativePath) => {
 
   if (yes) {
     console.log(`Creating an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`);
-    prepare({ ok: true, useYarn: hasYarn });
-    return;
+    return prepare({ ok: true, useYarn: hasYarn });
   }
 
   const questions = [
