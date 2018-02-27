@@ -211,7 +211,7 @@ async function run(err, appDirFiles, useYarn) {
   if (installDevDeps !== true) return;
 
   console.log();
-  console.log('✨  Installation complete.');
+  logWithEmoji('sparkles', 'Installation complete.');
   console.log(`Do not forget to rename the ${colors.warn('name')} inside the package.json file.`);
   console.log('You can now run these commands inside your application:');
   console.log();
