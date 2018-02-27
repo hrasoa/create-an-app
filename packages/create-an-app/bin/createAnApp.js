@@ -255,7 +255,7 @@ function logPkg(message) {
 }
 
 function logWithEmoji(emojiName, message) {
-  console.log(`${emoji.has(emojiName) ? emoji.get(emojiName) : '+'}  ${message}`);
+  console.log(`${emoji.hasEmoji(emojiName) ? emoji.get(emojiName) : '+'}  ${message}`);
 }
 
 function versionedDependency(deps) {
