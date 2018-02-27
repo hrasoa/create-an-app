@@ -39,7 +39,7 @@ module.exports = class Template {
    *
    * @param {Object} state
    */
-  set initialState(state = {}) {
+  set initialState(state) {
     this.state = JSON.stringify(state);
   }
 
@@ -47,7 +47,7 @@ module.exports = class Template {
    *
    * @param {Array} js
    */
-  set js(js = []) {
+  set js(js) {
     this.scripts = js;
     this.preloadJsRaw = js.map(href =>
       `<link rel="preload" as="script" href="${href}"/>`).join('');
