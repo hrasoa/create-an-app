@@ -1,6 +1,6 @@
 {
   "name": "a-react-template",
-  "version": "0.0.2-20.12",
+  "version": "0.0.2-20.13",
   "license": "MIT",
   "files": [
     "public",
@@ -25,6 +25,6 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
-    "some-scripts": "^0.0.2-20.12"
+    "some-scripts": "^0.0.2-20.13"
   }
 }
