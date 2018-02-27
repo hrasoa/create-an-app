@@ -90,24 +90,27 @@ async function prepare({ ok, useYarn }) {
     if (program.force === true) {
       await canThrow(fs.emptyDir(appDir));
     }
-    fs.readdir(appDir, (err, appDirFiles) => {
-      run(err, appDirFiles, useYarn);
-    });
+
+    const bootstrap = await canThrow(fs.readdir(appDir))
+      .then((appDirFiles) => { return run(useYarn, appDirFiles); });
+
+    if (bootstrap.message) {
+      throw new Error(message);
+    }
   } catch (err) {
-    logError(err.message);
+    console.log(`${colors.error('error')} ${err.message}`);
     console.log();
   }
 }
 
 /**
  *
- * @param err
  * @param appDirFiles
  * @param useYarn
  */
-async function run(err, appDirFiles, useYarn) {
-  if (err) {
-    throw new Error(err);
+async function run(useYarn, appDirFiles) {
+  if (appDirFiles && appDirFiles.length) {
+    throw new Error(`${colors.warn(appDir)} is not empty.\nPlease delete it\'s content or use --force option.`);
   }
 
   const pkg = {
@@ -123,12 +126,6 @@ async function run(err, appDirFiles, useYarn) {
     'yarn-error.log*',
     'dist/',
   ].join('\n');
-
-  if (appDirFiles && appDirFiles.length) {
-    logError(`${colors.warn(appDir)} seems not empty.`);
-    console.log('Please remove it\'s content or use --force option.');
-    return;
-  }
 
   const pkgPath = resolveAppDir('package.json');
 
@@ -165,12 +162,11 @@ async function run(err, appDirFiles, useYarn) {
   pkg.scripts = scripts || {};
 
   if (!(files && files.length)) {
-    console.log('');
-    logError(`The "files" field seems not defined or empty in the "${template}" package.json`);
-    console.log('We use it to create the application file structure.');
-    console.log('Related documentation: https://docs.npmjs.com/files/package.json#files');
-    console.log('');
-    return;
+    throw new Error([
+      `The "files" field seems not defined or empty in the "${template}" package.json`,
+      'We use it to create the application file structure.',
+      'Related documentation: https://docs.npmjs.com/files/package.json#files',
+    ].join('\n'));
   }
 
   console.log();
@@ -186,9 +182,7 @@ async function run(err, appDirFiles, useYarn) {
   const failed = dir.filter(file => file !== true);
 
   if (failed.length) {
-    logError('Could not copy these files:');
-    console.log(`${colors.verbose(failed.map(({ source }) => source).join('\n'))}`);
-    return;
+    throw new Error(`Could not copy these files:\n${colors.verbose(failed.map(({ source }) => source).join('\n'))}`);
   }
 
   writePkg = await writeJson(pkgPath, pkg);
@@ -265,14 +259,6 @@ function addDescriptionToScripts(scripts, useYarn) {
     }
     return { cmd: `${runCmd} ${cmd}`, desc };
   });
-}
-
-/**
- *
- * @param message
- */
-function logError(message) {
-  console.log(`${colors.error('error')} ${message}`);
 }
 
 /**
