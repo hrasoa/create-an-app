@@ -72,7 +72,7 @@ const resolveAppDir = (relativePath) => {
     });
   }
 
-  inquirer.prompt(questions).then(prepare);
+  return inquirer.prompt(questions).then(prepare);
 })();
 
 /**
@@ -90,10 +90,10 @@ async function prepare({ ok, useYarn }) {
     }
 
     const bootstrap = await canThrow(fs.readdir(appDir))
-      .then((appDirFiles) => { return run(useYarn, appDirFiles); });
+      .then(appDirFiles => run(useYarn, appDirFiles));
 
-    if (bootstrap.message) {
-      throw new Error(message);
+    if (bootstrap && bootstrap.message) {
+      throw new Error(bootstrap.message);
     }
   } catch (err) {
     console.log(`${colors.error('error')} ${err.message}`);
@@ -108,7 +108,7 @@ async function prepare({ ok, useYarn }) {
  */
 async function run(useYarn, appDirFiles) {
   if (appDirFiles && appDirFiles.length) {
-    throw new Error(`${colors.warn(appDir)} is not empty.\nPlease delete it\'s content or use --force option.`);
+    throw new Error(`${colors.warn(appDir)} is not empty.\nPlease delete it's content or use --force option.`);
   }
 
   const pkg = {
@@ -168,7 +168,7 @@ async function run(useYarn, appDirFiles) {
   }
 
   console.log();
-  logPkg(`Creating the files structure`);
+  logPkg('Creating the files structure');
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
 
@@ -370,7 +370,7 @@ function isYarnInstalled() {
 function canThrow(promise) {
   return promise
     .then(success => success)
-    .catch((err) => { throw new Error(err); })
+    .catch((err) => { throw new Error(err); });
 }
 
 /**
