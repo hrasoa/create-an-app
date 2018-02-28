@@ -178,7 +178,7 @@ async function run(useYarn, appDirFiles) {
       return catchError(fs.copy(source, dest));
     }),
     catchError(writeFile(gitignore, resolveAppDir('.gitignore'))),
-    catchError(writeFile(gitignore, resolveAppDir('README.md'))),
+    catchError(fs.copy(resolveTemplateDir('README.md'), resolveAppDir('README.md'))),
   ]);
   const failed = dir.filter(result => result && result.message !== undefined);
 
