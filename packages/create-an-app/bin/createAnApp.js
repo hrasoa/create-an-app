@@ -233,13 +233,15 @@ function addDescriptionToScripts(scripts, useYarn) {
     const script = { cmd: `${runCmd} ${cmd}`, desc: '' };
     switch (cmd) {
       case 'start':
-        return { ...script, desc: 'Start the dev server.' };
-      case 'start:prod':
-        return { cmd: `${runCmd}${(!useYarn && ' run') || ''} ${cmd}`, desc: 'Start the production server.' };
-      case 'build':
-        return { cmd: `${runCmd}${(!useYarn && ' run') || ''} ${cmd}`, desc: 'Build for production.' };
       case 'test':
-        return { ...script, desc: 'Run tests.' };
+        if (cmd === 'start') script.desc = 'Start the dev server.';
+        if (cmd === 'test') script.desc = 'Run tests.';
+        return script;
+      case 'start:prod':
+      case 'build':
+        if (cmd === 'start:prod') script.desc = 'Start the production server.';
+        if (cmd === 'build') script.desc = 'Build for production.';
+        return { ...script, cmd: `${runCmd}${(!useYarn && ' run') || ''} ${cmd}` };
       default:
         return script;
     }
