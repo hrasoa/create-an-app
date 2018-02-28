@@ -81,17 +81,17 @@ const resolveAppDir = (relativePath) => {
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
   try {
-    await throwError(fs.ensureDir(appDir));
+    await throwOnError(fs.ensureDir(appDir));
 
     if (program.force === true) {
-      await throwError(fs.emptyDir(appDir));
+      await throwOnError(fs.emptyDir(appDir));
     }
 
-    const bootstrap = await throwError(fs.readdir(appDir))
+    const bootstrap = await throwOnError(fs.readdir(appDir))
       .then(appDirFiles => run(useYarn, appDirFiles));
 
     if (bootstrap && bootstrap.message) {
-      throw new Error(bootstrap.message);
+      throw Error(bootstrap.message);
     }
   } catch (err) {
     console.log(`${colors.error('error')} ${err.message}`);
@@ -125,7 +125,7 @@ async function run(useYarn, appDirFiles) {
 
   const pkgPath = resolveAppDir('package.json');
 
-  await throwError(writeJson(pkgPath, pkg));
+  await throwOnError(writeJson(pkgPath, pkg));
 
   console.log();
   logWithPkgEmoji(`Installing ${colors.verbose(template)}`);
@@ -167,7 +167,7 @@ async function run(useYarn, appDirFiles) {
   console.log(colors.verbose('package.json'));
   console.log(colors.verbose('README.md'));
 
-  await throwError(writeJson(pkgPath, pkg));
+  await throwOnError(writeJson(pkgPath, pkg));
 
   const dir = await Promise.all([
     ...files.map(async (fileName) => {
@@ -332,7 +332,7 @@ function isYarnInstalled() {
  *
  * @param {promise} promise
  */
-function throwError(promise) {
+function throwOnError(promise) {
   return promise
     .then(success => success)
     .catch((err) => { throw Error(err); });
