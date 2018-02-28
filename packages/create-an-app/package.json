@@ -2,7 +2,7 @@
   "name": "create-an-app",
   "version": "0.0.7",
   "license": "MIT",
-  "description": "",
+  "description": "Create an app",
   "bin": "./bin/index.js",
   "repository": "hrasoa/create-an-app",
   "scripts": {

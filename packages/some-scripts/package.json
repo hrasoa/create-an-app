@@ -2,7 +2,7 @@
   "name": "some-scripts",
   "version": "0.0.7",
   "license": "MIT",
-  "description": "",
+  "description": "Somes cripts",
   "files": [
     "bin",
     "config",
