@@ -127,7 +127,7 @@ async function run(useYarn, appDirFiles) {
 
   const pkgPath = resolveAppDir('package.json');
 
-  await writeJson(pkgPath, pkg);
+  await throwError(writeJson(pkgPath, pkg));
 
   console.log();
   logPkg(`Installing ${colors.verbose(template)}`);
@@ -169,7 +169,7 @@ async function run(useYarn, appDirFiles) {
   console.log(colors.verbose('package.json'));
   console.log(colors.verbose('README.md'));
 
-  await writeJson(pkgPath, pkg);
+  await throwError(writeJson(pkgPath, pkg));
 
   const dir = await Promise.all([
     ...files.map(async (fileName) => {
@@ -290,10 +290,10 @@ function versionedDependency(deps) {
  * @returns {Promise.<boolean>}
  */
 function writeJson(path, content) {
-  return throwError(fs.writeJson(path, content, {
+  return fs.writeJson(path, content, {
     spaces: '  ',
     EOL,
-  }));
+  });
 }
 
 /**
