@@ -130,7 +130,7 @@ async function run(useYarn, appDirFiles) {
   await throwError(writeJson(pkgPath, pkg));
 
   console.log();
-  logPkg(`Installing ${colors.verbose(template)}`);
+  logWithPkgEmoji(`Installing ${colors.verbose(template)}`);
   console.log();
 
   const installTemplate = await install([
@@ -164,7 +164,7 @@ async function run(useYarn, appDirFiles) {
   }
 
   console.log();
-  logPkg('Creating the files structure');
+  logWithPkgEmoji('Creating the files structure');
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
   console.log(colors.verbose('README.md'));
@@ -190,7 +190,7 @@ async function run(useYarn, appDirFiles) {
   console.log();
 
   console.log();
-  logPkg('Installing dependencies:');
+  logWithPkgEmoji('Installing dependencies:');
   console.log(`${colors.verbose(versionedDeps.join('\n'))}`);
   console.log();
 
@@ -202,7 +202,7 @@ async function run(useYarn, appDirFiles) {
   if (installDeps !== true) return;
 
   console.log();
-  logPkg('Installing dev dependencies:');
+  logWithPkgEmoji('Installing dev dependencies:');
   console.log(`${colors.verbose(versionedDevDeps.join('\n'))}`);
   console.log();
 
@@ -260,7 +260,7 @@ function addDescriptionToScripts(scripts, useYarn) {
  *
  * @param message
  */
-function logPkg(message) {
+function logWithPkgEmoji(message) {
   logWithEmoji('package', message);
 }
 
@@ -270,7 +270,7 @@ function logPkg(message) {
  * @param message
  */
 function logWithEmoji(emojiName, message) {
-  console.log(`${emoji.hasEmoji(emojiName) ? emoji.get(emojiName) : '+'}  ${message}`);
+  console.log(`${emoji.hasEmoji(emojiName) ? `${emoji.get(emojiName)} ` : '+'} ${message}`);
 }
 
 /**
