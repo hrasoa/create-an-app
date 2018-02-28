@@ -83,13 +83,13 @@ const resolveAppDir = (relativePath) => {
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
   try {
-    await canThrow(fs.ensureDir(appDir));
+    await throwError(fs.ensureDir(appDir));
 
     if (program.force === true) {
-      await canThrow(fs.emptyDir(appDir));
+      await throwError(fs.emptyDir(appDir));
     }
 
-    const bootstrap = await canThrow(fs.readdir(appDir))
+    const bootstrap = await throwError(fs.readdir(appDir))
       .then(appDirFiles => run(useYarn, appDirFiles));
 
     if (bootstrap && bootstrap.message) {
@@ -290,7 +290,7 @@ function versionedDependency(deps) {
  * @returns {Promise.<boolean>}
  */
 function writeJson(path, content) {
-  return canThrow(fs.writeJson(path, content, {
+  return throwError(fs.writeJson(path, content, {
     spaces: '  ',
     EOL,
   }));
@@ -349,7 +349,7 @@ function isYarnInstalled() {
  * @param promise
  * @returns {Promise.<TResult>}
  */
-function canThrow(promise) {
+function throwError(promise) {
   return promise
     .then(success => success)
     .catch((err) => { throw new Error(err); });
