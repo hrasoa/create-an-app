@@ -38,9 +38,7 @@ export default function serverRenderer({ clientStats, options = {} }) {
       .on('error', (err) => {
         // Log the error on the console for debugging
         /* eslint-disable no-console */
-        log.error(`
-          \n🙀  Woops something went wrong...
-        `);
+        log.error('Woops something went wrong...');
         console.log(err.stack);
         // Render a 500 component
         // So the app can still be interactive
