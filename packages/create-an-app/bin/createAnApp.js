@@ -176,7 +176,7 @@ async function run(useYarn, appDirFiles) {
       const dest = resolveAppDir(fileName);
       return catchError(fs.copy(source, dest));
     }),
-    writeFile(gitignore, resolveAppDir('.gitignore')),
+    catchError(writeFile(gitignore, resolveAppDir('.gitignore'))),
   ]);
   const failed = dir.filter(result => result && result.message !== undefined);
 
@@ -301,7 +301,7 @@ function writeJson(path, content) {
  * @returns {Promise.<boolean>}
  */
 function writeFile(content, path) {
-  return catchError(fs.writeFile(path, content + EOL));
+  return fs.writeFile(path, content + EOL);
 }
 
 /**
