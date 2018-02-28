@@ -170,7 +170,7 @@ async function run(useYarn, appDirFiles) {
   await throwOnError(writeJson(pkgPath, pkg));
 
   const dir = await Promise.all([
-    ...files.map(async (fileName) => {
+    ...files.map((fileName) => {
       const source = resolveTemplateDir(fileName);
       const dest = resolveAppDir(fileName);
       return catchError(fs.copy(source, dest));
