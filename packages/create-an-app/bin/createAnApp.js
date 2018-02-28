@@ -49,16 +49,18 @@ const resolveAppDir = (relativePath) => {
   const hasYarn = await isYarnInstalled();
   console.log(colors.bold(`${name} v${version}`));
   console.log();
+  const message = verb =>
+    `${verb} an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`;
 
   if (yes) {
-    console.log(`Creating an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`);
+    console.log(message('Creating'));
     return prepare({ ok: true, useYarn: hasYarn });
   }
 
   const questions = [
     {
       name: 'ok',
-      message: `Create an app in ${colors.warn(appDir)} with the template ${colors.warn(template)}`,
+      message: message('Create'),
       type: 'confirm',
     },
   ];
