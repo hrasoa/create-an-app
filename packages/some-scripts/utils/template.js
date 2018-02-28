@@ -4,7 +4,7 @@ const flushChunks = require('./flushChunks');
 module.exports = class Template {
   /**
    *
-   * @param {Object} props Properties
+   * @param {*} props Properties
    */
   constructor(props = {}) {
     this.props(props);
@@ -14,7 +14,7 @@ module.exports = class Template {
 
   /**
    * Set a group of properties
-   * @param {Object} props Properties
+   * @param {*} props Properties
    */
   props(props = {}) {
     Object.keys(props).forEach((propName) => { this[propName] = props[propName]; });
@@ -22,8 +22,8 @@ module.exports = class Template {
 
   /**
    * Should be called after renderToNodeStream or renderToString
-   * @param {Object} clientStats Webpack json stats
-   * @param {Array} chunkNames Chunks by name
+   * @param {*} clientStats Webpack json stats
+   * @param {*} chunkNames Chunks by name
    */
   setChunks(clientStats = {}, chunkNames = []) {
     const { scripts } = flushChunks(clientStats, {
@@ -41,7 +41,7 @@ module.exports = class Template {
 
   /**
    *
-   * @param {Object} state
+   * @param {*} state
    */
   set initialState(state) {
     this.state = JSON.stringify(state);
@@ -49,7 +49,7 @@ module.exports = class Template {
 
   /**
    *
-   * @param {Array} js
+   * @param {*} js
    */
   set js(js) {
     this.scripts = js;

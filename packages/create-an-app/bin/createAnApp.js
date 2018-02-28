@@ -76,7 +76,7 @@ const resolveAppDir = (relativePath) => {
 
 /**
  *
- * @param {*} questions
+ * @param {*} answers
  */
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
