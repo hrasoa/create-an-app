@@ -15,14 +15,6 @@
   "packages": [
     "packages/*"
   ],
-  "command": {
-    "publish": {
-      "allowBranch": [
-        "master",
-        "next"
-      ]
-    }
-  },
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "0.0.8"
