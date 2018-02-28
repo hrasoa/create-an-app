@@ -338,6 +338,10 @@ function throwOnError(promise) {
     .catch((err) => { throw Error(err); });
 }
 
+/**
+ *
+ * @param {promise} promise
+ */
 function catchError(promise) {
   return promise
     .then(success => success)
