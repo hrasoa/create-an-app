@@ -35,8 +35,7 @@ const { yes } = program;
 
 /**
  *
- * @param relativePath
- * @returns {*}
+ * @param {string} relativePath
  */
 const resolveAppDir = (relativePath) => {
   try {
@@ -77,8 +76,7 @@ const resolveAppDir = (relativePath) => {
 
 /**
  *
- * @param ok
- * @param useYarn
+ * @param {*} questions
  */
 async function prepare({ ok, useYarn }) {
   if (!ok) return;
@@ -103,12 +101,12 @@ async function prepare({ ok, useYarn }) {
 
 /**
  *
- * @param appDirFiles
- * @param useYarn
+ * @param {boolean} useYarn
+ * @param {*} appDirFiles
  */
 async function run(useYarn, appDirFiles) {
   if (appDirFiles && appDirFiles.length) {
-    throw new Error(`${colors.warn(appDir)} is not empty.\nPlease delete it's content or use --force option.`);
+    throw Error(`${colors.warn(appDir)} is not empty.\nPlease delete it's content or use --force option.`);
   }
 
   const pkg = {
@@ -156,7 +154,7 @@ async function run(useYarn, appDirFiles) {
   pkg.scripts = scripts || {};
 
   if (!(files && files.length)) {
-    throw new Error([
+    throw Error([
       `The "files" field seems not defined or empty in the "${template}" package.json`,
       'We use it to create the application file structure.',
       'Related documentation: https://docs.npmjs.com/files/package.json#files',
@@ -183,7 +181,7 @@ async function run(useYarn, appDirFiles) {
   const failed = dir.filter(result => result && result.message !== undefined);
 
   if (failed.length) {
-    throw new Error(failed.map(fail => fail.message).join('\n'));
+    throw Error(failed.map(fail => fail.message).join('\n'));
   }
 
   console.log(`${colors.info('sucess')} Files were created.`);
@@ -226,9 +224,8 @@ async function run(useYarn, appDirFiles) {
 
 /**
  *
- * @param scripts
- * @param useYarn
- * @returns {Array|*}
+ * @param {*} scripts
+ * @param {boolean} useYarn
  */
 function addDescriptionToScripts(scripts, useYarn) {
   return scripts.map((cmd) => {
@@ -258,7 +255,7 @@ function addDescriptionToScripts(scripts, useYarn) {
 
 /**
  *
- * @param message
+ * @param {string} message
  */
 function logWithPkgEmoji(message) {
   logWithEmoji('package', message);
@@ -266,8 +263,8 @@ function logWithPkgEmoji(message) {
 
 /**
  *
- * @param emojiName
- * @param message
+ * @param {string} emojiName
+ * @param {string} message
  */
 function logWithEmoji(emojiName, message) {
   console.log(`${emoji.hasEmoji(emojiName) ? `${emoji.get(emojiName)} ` : '+'} ${message}`);
@@ -275,8 +272,7 @@ function logWithEmoji(emojiName, message) {
 
 /**
  *
- * @param deps
- * @returns {Array}
+ * @param {*} deps
  */
 function versionedDependency(deps) {
   return Object.keys(deps)
@@ -285,9 +281,8 @@ function versionedDependency(deps) {
 
 /**
  *
- * @param path
- * @param content
- * @returns {Promise.<boolean>}
+ * @param {string} path
+ * @param {string} content
  */
 function writeJson(path, content) {
   return fs.writeJson(path, content, {
@@ -298,9 +293,8 @@ function writeJson(path, content) {
 
 /**
  *
- * @param content
- * @param path
- * @returns {Promise.<boolean>}
+ * @param {string} content
+ * @param {string} path
  */
 function writeFile(content, path) {
   return fs.writeFile(path, content + EOL);
@@ -308,10 +302,9 @@ function writeFile(content, path) {
 
 /**
  *
- * @param args
- * @param options
- * @param useYarn
- * @returns {Promise.<TResult>}
+ * @param {*} args
+ * @param {*} options
+ * @param {boolean} useYarn
  */
 function install(args, options, useYarn) {
   return promisify((resolve, reject) => {
@@ -331,10 +324,6 @@ function install(args, options, useYarn) {
   });
 }
 
-/**
- *
- * @returns {Promise.<TResult>}
- */
 function isYarnInstalled() {
   return promisify((resolve, reject) => {
     exec('yarnpkg --version', (error) => {
@@ -345,26 +334,24 @@ function isYarnInstalled() {
 }
 
 /**
- * Throws an error
- * @param promise
- * @returns {Promise.<TResult>}
+ *
+ * @param {promise} promise
  */
 function throwError(promise) {
   return promise
     .then(success => success)
-    .catch((err) => { throw new Error(err); });
+    .catch((err) => { throw Error(err); });
 }
 
 function catchError(promise) {
   return promise
     .then(success => success)
-    .catch(err => new Error(err));
+    .catch(err => Error(err));
 }
 
 /**
  *
- * @param fn
- * @returns {Promise.<TResult>}
+ * @param {*} fn
  */
 function promisify(fn) {
   return new Promise(fn)
