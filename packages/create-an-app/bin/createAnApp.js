@@ -127,11 +127,7 @@ async function run(useYarn, appDirFiles) {
 
   const pkgPath = resolveAppDir('package.json');
 
-  let writePkg = await writeJson(pkgPath, pkg);
-  if (writePkg !== true) {
-    console.log(writePkg);
-    return;
-  }
+  await writeJson(pkgPath, pkg);
 
   console.log();
   logPkg(`Installing ${colors.verbose(template)}`);
@@ -172,21 +168,20 @@ async function run(useYarn, appDirFiles) {
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
 
+  await writeJson(pkgPath, pkg);
+
   const dir = await Promise.all([
-    ...files.map(async fileName =>
-      copy(resolveTemplateDir(fileName), resolveAppDir(fileName))),
+    ...files.map(async (fileName) => {
+      const source = resolveTemplateDir(fileName);
+      const dest = resolveAppDir(fileName);
+      return catchError(fs.copy(source, dest));
+    }),
     writeFile(gitignore, resolveAppDir('.gitignore')),
   ]);
-  const failed = dir.filter(file => file !== true);
+  const failed = dir.filter(result => result && result.message !== undefined);
 
   if (failed.length) {
-    throw new Error(`Could not copy these files:\n${colors.verbose(failed.map(({ source }) => source).join('\n'))}`);
-  }
-
-  writePkg = await writeJson(pkgPath, pkg);
-  if (writePkg !== true) {
-    console.log(writePkg);
-    return;
+    throw new Error(failed.map(fail => fail.message).join('\n'));
   }
 
   console.log(`${colors.info('sucess')} Files were created.`);
@@ -288,28 +283,15 @@ function versionedDependency(deps) {
 
 /**
  *
- * @param source
- * @param dest
- * @returns {Promise.<boolean>}
- */
-function copy(source, dest) {
-  return fs.copy(source, dest)
-    .then(() => true)
-    .catch(() => ({ source, dest }));
-}
-
-/**
- *
  * @param path
  * @param content
  * @returns {Promise.<boolean>}
  */
 function writeJson(path, content) {
-  return fs.writeJson(path, content, {
+  return canThrow(fs.writeJson(path, content, {
     spaces: '  ',
     EOL,
-  }).then(() => true)
-    .catch(() => `Could not write ${path}.`);
+  }));
 }
 
 /**
@@ -319,9 +301,7 @@ function writeJson(path, content) {
  * @returns {Promise.<boolean>}
  */
 function writeFile(content, path) {
-  return fs.writeFile(path, content + EOL)
-    .then(() => true)
-    .catch(() => ({ source: path, path }));
+  return catchError(fs.writeFile(path, content + EOL));
 }
 
 /**
@@ -363,7 +343,7 @@ function isYarnInstalled() {
 }
 
 /**
- *
+ * Throws an error
  * @param promise
  * @returns {Promise.<TResult>}
  */
@@ -371,6 +351,12 @@ function canThrow(promise) {
   return promise
     .then(success => success)
     .catch((err) => { throw new Error(err); });
+}
+
+function catchError(promise) {
+  return promise
+    .then(success => success)
+    .catch(err => new Error(err));
 }
 
 /**
