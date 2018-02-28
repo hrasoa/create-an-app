@@ -167,6 +167,7 @@ async function run(useYarn, appDirFiles) {
   logPkg('Creating the files structure');
   console.log(`${colors.verbose(files.join('\n'))}`);
   console.log(colors.verbose('package.json'));
+  console.log(colors.verbose('README.md'));
 
   await writeJson(pkgPath, pkg);
 
@@ -177,6 +178,7 @@ async function run(useYarn, appDirFiles) {
       return catchError(fs.copy(source, dest));
     }),
     catchError(writeFile(gitignore, resolveAppDir('.gitignore'))),
+    catchError(writeFile(gitignore, resolveAppDir('README.md'))),
   ]);
   const failed = dir.filter(result => result && result.message !== undefined);
 
