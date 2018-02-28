@@ -229,27 +229,20 @@ async function run(useYarn, appDirFiles) {
  */
 function addDescriptionToScripts(scripts, useYarn) {
   return scripts.map((cmd) => {
-    let desc = '';
-    let runCmd = useYarn ? 'yarn' : 'npm';
+    const runCmd = useYarn ? 'yarn' : 'npm';
+    const script = { cmd: `${runCmd} ${cmd}`, desc: '' };
     switch (cmd) {
       case 'start':
-        desc = 'Start the local server.';
-        break;
+        return { ...script, desc: 'Start the dev server.' };
       case 'start:prod':
-        desc = 'Start the production server.';
-        runCmd = useYarn ? runCmd : `${runCmd} run`;
-        break;
+        return { cmd: `${runCmd}${(!useYarn && ' run') || ''} ${cmd}`, desc: 'Start the production server.' };
       case 'build':
-        desc = 'Bundle the application for production.';
-        runCmd = useYarn ? runCmd : `${runCmd} run`;
-        break;
+        return { cmd: `${runCmd}${(!useYarn && ' run') || ''} ${cmd}`, desc: 'Build for production.' };
       case 'test':
-        desc = 'Run the tests.';
-        break;
+        return { ...script, desc: 'Run tests.' };
       default:
-        break;
+        return script;
     }
-    return { cmd: `${runCmd} ${cmd}`, desc };
   });
 }
 
