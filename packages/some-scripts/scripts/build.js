@@ -14,7 +14,7 @@ webpack([clientConfig, serverConfig], async (err, stats) => {
   }
   console.log(stats.toString({ ...clientConfig.stats }));
   console.log();
-  console.log('Begin uglify.');
+  console.log('Begin uglify...');
   const fontLoader = await readFile(ownDirFile('utils/fontLoader.js'));
   const { code } = UglifyJS.minify(fontLoader);
   await writeFile(appDistClientFile('fontLoader.js'), code);
