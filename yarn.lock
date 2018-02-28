@@ -3687,9 +3687,13 @@ hoek@4.x.x:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
 
-hoist-non-react-statics@^2.3.0, hoist-non-react-statics@^2.3.1:
+hoist-non-react-statics@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
+
+hoist-non-react-statics@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.0.tgz#d2ca2dfc19c5a91c5a6615ce8e564ef0347e2a40"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -6486,14 +6490,15 @@ react-helmet-async@^0.0.5:
     prop-types "^15.6.0"
     shallowequal "^1.0.2"
 
-react-hot-loader@^4.0.0-beta.18:
-  version "4.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.0.0-beta.18.tgz#5a3d1b5bd813633380b88c0c660019dbf638975d"
+react-hot-loader@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.0.0.tgz#3452fa9bc0d0ba9dfc5b0ccfa25101ca8dbd2de2"
   dependencies:
     fast-levenshtein "^2.0.6"
     global "^4.3.0"
-    hoist-non-react-statics "^2.3.1"
-    react-stand-in "^4.0.0-beta.18"
+    hoist-non-react-statics "^2.5.0"
+    prop-types "^15.6.0"
+    shallowequal "^1.0.2"
 
 react-loadable@^5.3.1:
   version "5.3.1"
@@ -6532,12 +6537,6 @@ react-router@^4.2.0:
     path-to-regexp "^1.7.0"
     prop-types "^15.5.4"
     warning "^3.0.0"
-
-react-stand-in@^4.0.0-beta.18:
-  version "4.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/react-stand-in/-/react-stand-in-4.0.0-beta.18.tgz#67d83309ae5d95526a2d1124beaa7ab093085cb2"
-  dependencies:
-    shallowequal "^1.0.2"
 
 react-test-renderer@^16.0.0-0:
   version "16.2.0"
