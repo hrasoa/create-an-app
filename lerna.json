@@ -17,10 +17,13 @@
   ],
   "command": {
     "publish": {
-      "allowBranch": ["master", "next"]
+      "allowBranch": [
+        "master",
+        "next"
+      ]
     }
   },
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
