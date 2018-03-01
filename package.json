@@ -17,11 +17,11 @@
     "build": "cd packages/a-react-template && NODE_ENV=production npm run build",
     "start": "cd packages/a-react-template && npm start",
     "start:prod": "cd packages/a-react-template && NODE_ENV=production npm start",
-    "test": "cd packages/a-react-template && npm test",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    "test": "cd packages/a-react-template && npm test"
   },
   "devDependencies": {
     "conventional-changelog": "^1.1.17",
+    "conventional-recommended-bump": "^2.0.6",
     "lerna": "^2.9.0"
   },
   "workspaces": [
