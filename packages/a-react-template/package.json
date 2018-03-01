@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "some-scripts": "^0.0.20"
+  },
+  "engines": {
+    "node": ">=6.13 >=8.9.0"
   }
 }

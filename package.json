@@ -20,11 +20,12 @@
     "test": "cd packages/a-react-template && npm test"
   },
   "devDependencies": {
-    "conventional-changelog": "^1.1.17",
-    "conventional-recommended-bump": "^2.0.6",
     "lerna": "^2.9.0"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "cross-spawn": "^6.0.4"
+  }
 }
