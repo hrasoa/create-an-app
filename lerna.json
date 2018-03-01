@@ -16,8 +16,7 @@
     "packages/*"
   ],
   "lifecycle": {
-    "version": "conventional-recommended-bump -p angular",
-    "pretag": "conventional-changelog -p angular"
+    "pretag": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
   "npmClient": "yarn",
   "useWorkspaces": true,
