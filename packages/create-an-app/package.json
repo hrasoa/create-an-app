@@ -1,6 +1,6 @@
 {
   "name": "create-an-app",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "description": "Create an app",
   "bin": "./bin/index.js",
