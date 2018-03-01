@@ -18,7 +18,7 @@
     "start": "cd packages/a-react-template && npm start",
     "start:prod": "cd packages/a-react-template && NODE_ENV=production npm start",
     "test": "cd packages/a-react-template && npm test",
-    "postversion": "lerna-changelog"
+    "version": "lerna-changelog"
   },
   "devDependencies": {
     "lerna": "^2.9.0"
