@@ -18,9 +18,10 @@
     "start": "cd packages/a-react-template && npm start",
     "start:prod": "cd packages/a-react-template && NODE_ENV=production npm start",
     "test": "cd packages/a-react-template && npm test",
-    "version": "lerna-changelog >> README.md"
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "devDependencies": {
+    "conventional-changelog": "^1.1.17",
     "lerna": "^2.9.0"
   },
   "workspaces": [
