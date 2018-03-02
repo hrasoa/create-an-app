@@ -4,11 +4,13 @@ function getPlugins(target) {
   switch (target) {
     case 'web':
       return [
-        ['@babel/plugin-transform-runtime', {
-          helpers: false,
-          polyfill: false,
-          regenerator: true,
-        }],
+        [
+          '@babel/plugin-transform-runtime', {
+            helpers: false,
+            polyfill: false,
+            regenerator: true,
+          },
+        ],
         '@babel/plugin-syntax-dynamic-import',
         'react-loadable/babel',
         isDevelopment && 'react-hot-loader/babel',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
 import Loadable from 'react-loadable';
-import App from './containers/App';
+import { App } from './containers';
 import './main.scss';
 
 window.main = async () => {

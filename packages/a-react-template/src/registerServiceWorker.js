@@ -1,4 +1,4 @@
-if ('serviceWorker' in navigator) {
+if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     /* eslint-disable no-console */
     navigator.serviceWorker.register('/sw.js').then(() => {

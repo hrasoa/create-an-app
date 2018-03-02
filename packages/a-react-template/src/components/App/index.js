@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet-async';
 import Content from './App';
-import ErrorBoundary from '../../containers/ErrorBoundary';
+import { ErrorBoundary } from '../../containers';
 
 const App = ({ hasError }) => (
   <Fragment>
