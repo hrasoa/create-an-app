@@ -3,6 +3,7 @@ const path = require('path');
 const through = require('through');
 const { execSync } = require('child_process');
 const minimist = require('minimist');
+const { EOL } = require('os');
 
 const argv = minimist(process.argv.slice(2));
 const tagTo = argv.to || null;
@@ -36,7 +37,7 @@ fs.createReadStream(md, { encoding: 'utf8' })
       this.queue(data);
     },
     function end() {
-      this.queue(null);
+      this.queue(EOL);
     },
   ))
   .pipe(fs.createWriteStream(tmp))
