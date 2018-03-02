@@ -5,8 +5,8 @@ const { execSync } = require('child_process');
 const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
-const tagTo = argv['tag-to'] ? `v${argv['tag-to']}` : 'next';
-const tagToName = argv['tag-to-name'] ? `v${argv['tag-to-name']}` : null;
+const tagTo = argv.to || null;
+const tagFinalName = argv['final-name'] || null;
 const md = path.resolve(__dirname, '../CHANGELOG.md');
 const tmp = path.resolve(__dirname, '../CHANGELOG.tmp.md');
 
@@ -15,12 +15,12 @@ fs.createReadStream(md, { encoding: 'utf8' })
     function write(data) {
       const headlines = /## ([0-9a-z.-]+)/;
       const match = headlines.exec(data);
-      if (match && match.length >= 2) {
+      if (tagTo && match && match.length >= 2) {
         try {
           const result = execSync(`lerna-changelog --tag-from ${match[1]} --tag-to ${tagTo}`);
           const changelog = Buffer.from(result).toString().trim();
           if (changelog) {
-            this.queue(changelog.replace(tagTo, tagToName || tagTo));
+            this.queue(changelog.replace(tagTo, tagFinalName || tagTo));
             this.queue('\n\n');
           }
         } catch (err) {
