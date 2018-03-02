@@ -14,7 +14,6 @@ fs.createReadStream(md, { encoding: 'utf8' })
   .pipe(through(
     function write(data) {
       // Regex to seach for the last released tag
-      // thats why we omit the "gm" flag
       const headlines = /## ([0-9a-z.-]+)/;
       const match = headlines.exec(data);
       if (tagTo && match && match.length >= 2) {
