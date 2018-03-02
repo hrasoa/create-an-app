@@ -38,6 +38,7 @@ fs.createReadStream(md, { encoding: 'utf8' })
     },
     function end() {
       this.queue(EOL);
+      this.queue(null);
     },
   ))
   .pipe(fs.createWriteStream(tmp))

@@ -7,6 +7,25 @@
 #### Committers: 1
 - Haja Rasoahaingo ([hrasoa](https://github.com/hrasoa))
 
+
+## v0.0.23-0 (2018-03-02)
+
+#### :nail_care: Polish
+* `some-scripts`
+  * [#9](https://github.com/hrasoa/create-an-app/pull/9) an update. ([@hrasoa](https://github.com/hrasoa))
+
+#### Committers: 1
+- Haja Rasoahaingo ([hrasoa](https://github.com/hrasoa))
+
+## v0.0.23 (2018-03-02)
+
+#### :nail_care: Polish
+* `some-scripts`
+  * [#9](https://github.com/hrasoa/create-an-app/pull/9) an update. ([@hrasoa](https://github.com/hrasoa))
+
+#### Committers: 1
+- Haja Rasoahaingo ([hrasoa](https://github.com/hrasoa))
+
 ## v0.0.22 (2018-03-02)
 
 #### :house: Internal
