@@ -13,15 +13,21 @@ const tmp = path.resolve(__dirname, '../CHANGELOG.tmp.md');
 fs.createReadStream(md, { encoding: 'utf8' })
   .pipe(through(
     function write(data) {
+      // Regex to seach for the last released tag
+      // thats why we omit the "gm" flag
       const headlines = /## ([0-9a-z.-]+)/;
       const match = headlines.exec(data);
       if (tagTo && match && match.length >= 2) {
         try {
           const result = execSync(`lerna-changelog --tag-from ${match[1]} --tag-to ${tagTo}`);
           const changelog = Buffer.from(result).toString().trim();
-          if (changelog) {
+          // Test if the command generated a changelog
+          if (changelog && changelog.match(/## [0-9a-z.-]+/)) {
+            // Prepend the new changelog
             this.queue(changelog.replace(tagTo, tagFinalName || tagTo));
             this.queue('\n\n');
+          } else {
+            console.log(`error: ${changelog}`);
           }
         } catch (err) {
           this.queue(null);
