@@ -26,6 +26,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "cross-spawn": "^6.0.4"
+    "cross-spawn": "^6.0.4",
+    "through": "^2.3.8"
   }
 }
