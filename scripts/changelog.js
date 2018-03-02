@@ -2,16 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const through = require('through');
 const { execSync } = require('child_process');
+const minimist = require('minimist');
 
-const tag = process.argv[2] ? `v${process.argv[2]}` : 'next';
-const tagName = process.argv[3] ? `v${process.argv[3]}` : null;
+const argv = minimist(process.argv.slice(2));
+const tag = argv['tag-from'] ? `v${argv['tag-from']}` : 'next';
+const tagName = argv['tag-name'] ? `v${argv['tag-name']}` : null;
 const md = path.resolve(__dirname, '../CHANGELOG.md');
 const tmp = path.resolve(__dirname, '../CHANGELOG.tmp.md');
 
 fs.createReadStream(md, { encoding: 'utf8' })
   .pipe(through(
     function write(data) {
-      const headlines = /## ([0-9a-z.]+)/;
+      const headlines = /## ([0-9a-z.-]+)/;
       const match = headlines.exec(data);
       if (match && match.length >= 2) {
         try {
