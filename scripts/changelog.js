@@ -32,8 +32,9 @@ fs.createReadStream(md, { encoding: 'utf8' })
       this.queue(null);
     },
   ))
-  .pipe(wr);
-
-fs.rename(tmp, md, (err) => {
-  if (err) console.log(err);
-});
+  .pipe(fs.createWriteStream(tmp))
+  .on('finish', function () {
+    fs.rename(tmp, md, (err) => {
+      if (err) console.log(err);
+    });
+  });
