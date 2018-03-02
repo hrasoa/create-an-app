@@ -19,14 +19,14 @@
     "start:prod": "cd packages/a-react-template && NODE_ENV=production npm start",
     "test": "cd packages/a-react-template && npm test"
   },
+  "dependencies": {
+    "cross-spawn": "^6.0.4",
+    "through": "^2.3.8"
+  },
   "devDependencies": {
     "lerna": "^2.9.0"
   },
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "cross-spawn": "^6.0.4",
-    "through": "^2.3.8"
-  }
+  ]
 }
