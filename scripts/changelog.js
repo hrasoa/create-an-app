@@ -37,7 +37,6 @@ fs.createReadStream(md, { encoding: 'utf8' })
       this.queue(data);
     },
     function end() {
-      this.queue(EOL);
       this.queue(null);
     },
   ))

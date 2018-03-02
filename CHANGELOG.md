@@ -7,7 +7,6 @@
 #### Committers: 1
 - Haja Rasoahaingo ([hrasoa](https://github.com/hrasoa))
 
-
 ## v0.0.23-0 (2018-03-02)
 
 #### :nail_care: Polish
