@@ -1,3 +1,12 @@
+## v0.0.22 (2018-03-02)
+
+#### :house: Internal
+* `a-react-template`, `create-an-app`, `some-scripts`
+  * [#8](https://github.com/hrasoa/create-an-app/pull/8) add changelog generator script. ([@hrasoa](https://github.com/hrasoa))
+
+#### Committers: 1
+- Haja Rasoahaingo ([hrasoa](https://github.com/hrasoa))
+
 ## v0.0.21 (2018-03-01)
 
 #### :rocket: New Feature
