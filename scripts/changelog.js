@@ -6,6 +6,7 @@ const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
 const tagTo = argv.to || null;
+const tagFrom = argv.from || null;
 const tagFinalName = argv['final-name'] || null;
 const md = path.resolve(__dirname, '../CHANGELOG.md');
 const tmp = path.resolve(__dirname, '../CHANGELOG.tmp.md');
@@ -18,7 +19,7 @@ fs.createReadStream(md, { encoding: 'utf8' })
       const match = headlines.exec(data);
       if (tagTo && match && match.length >= 2) {
         try {
-          const result = execSync(`lerna-changelog --tag-from ${match[1]} --tag-to ${tagTo}`);
+          const result = execSync(`lerna-changelog --tag-from ${tagFrom || match[1]} --tag-to ${tagTo}`);
           const changelog = Buffer.from(result).toString().trim();
           // Test if the command generated a changelog
           if (changelog && changelog.match(/## [0-9a-z.-]+/)) {
@@ -26,7 +27,7 @@ fs.createReadStream(md, { encoding: 'utf8' })
             this.queue(changelog.replace(tagTo, tagFinalName || tagTo));
             this.queue('\n\n');
           } else {
-            console.log(`error: ${changelog}`);
+            console.log(changelog);
           }
         } catch (err) {
           this.queue(null);
