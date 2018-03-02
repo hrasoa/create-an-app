@@ -1,6 +1,6 @@
 {
   "name": "a-react-template",
-  "version": "0.0.23-0",
+  "version": "0.0.23",
   "license": "MIT",
   "description": "A react template",
   "files": [
@@ -26,7 +26,7 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
-    "some-scripts": "^0.0.23-0"
+    "some-scripts": "^0.0.23"
   },
   "engines": {
     "node": ">=6.13 >=8.9.0"
